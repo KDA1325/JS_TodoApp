@@ -36,6 +36,10 @@ function createNewTodo()
     // => 새로운 todo 요소를 추가하면 제일 위에 쌓이도록 함
     // 리스트 요소 안에 방금 생성한 아이템 요소 추가
     list.prepend(itemEl);
+        // 요소가 생기면 클릭해서 타이핑을 할 수 있게 됨
+        inputEl.removeAttribute('disabled');
+        // 포커스를 넣어주면 클릭하지 않아도 요소가 생기자마자 키보드 입력으로 타이핑 할 수 있게 됨
+        inputEl.focus();
 }
 
 // 요소 생성 함수
