@@ -78,9 +78,56 @@ function createTodoElement(item)
         editBtnEl.innerText = "edit";
         
         const removeBtnEl = document.createElement("button");
-        removeBtnEl.classList.add("material-icons-remove-btn");
-        removeBtnEl.innerText = "remove_circles";
+        removeBtnEl.classList.add("material-icons","remove-btn");
+        removeBtnEl.innerText = "remove_circle";
         // 여기까지는 요소 생성. div 요소 안으로 넣어주는 추가 동작이 필요 
+
+
+        // 체크박스의 상태가 바뀌면 
+        checkboxEl.addEventListener('change', () => {
+            // todo 요소의 complete 값을 체크된 상태로 변경
+            item.complete = checkboxEl.checked;
+
+            // complete가 true면 div 요소에 class로 complete가 들어감
+            if(item.complete)
+                {
+                    itemEl.classList.add('complete');
+                }
+            // complete가 false면 div 요소에 class로 complete가 들어감
+            else{
+                itemEl.classList.remove('complete');
+            }
+            
+        })
+
+        // inputEl가 포커스 상태가 아닐 때(다른 요소를 선택했을 때)
+        inputEl.addEventListener('blur', () => {
+            // 텍스트 입력 불가능 
+            inputEl.setAttribute('disabled', '');
+        })
+
+        // 입력된 텍스트를 생성된 todo 요소의 텍스트로 저장
+        inputEl.addEventListener('input', () => {
+            item.text = inputEl.value;
+        })
+
+        // edit 버튼을 눌렀을 때 텍스트 입력 가능 + 포커스
+        editBtnEl.addEventListener('click', () => {
+            inputEl.removeAttribute('disabled');
+            inputEl.focus();
+        })
+
+        // remove 버튼을 눌렀을 때 item 요소 + todo 데이터 모두 삭제 
+        removeBtnEl.addEventListener('click', () => {
+            // filter 메소드, 요소의 처음부터 순회하며 필터링을 걸 수 있음
+            // item.id => 생성된 item 요소의 id
+            // => todos 배열 내에서 클릭한 item 요소의 id와 다른 id들만 새로운 todos 배열로 반환
+            // => 같은 id는 필터링되는 것
+            todos = todos.filter( t => t.id !== item.id );
+
+            // item 요소 삭제
+            itemEl.remove();
+        })
 
         // edit, remove 버튼 요소를 액션 엘리먼트 요소에 넣음
         actionsEl.append(editBtnEl);
