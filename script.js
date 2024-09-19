@@ -56,6 +56,8 @@ function createTodoElement(item) {
     // type이 checkbox인 input 요소 생성
     const checkboxEl = document.createElement("input");
     checkboxEl.type = "checkbox";
+    // 로컬 저장소에 저장된 데이터대로 체크 여부 반영
+    checkboxEl.checked = item.complete;
 
     // item의 complete 값이 true일 때
     if (item.complete) {
@@ -99,12 +101,18 @@ function createTodoElement(item) {
             itemEl.classList.remove('complete');
         }
 
+        // 체크 박스 체크 여부도 저장하기 위한 함수 호출
+        saveToLocalStorage();
+        // 여기까지 하면 데이터 저장은 되지만 웹 페이지에 반영은 안 됨
     })
 
     // inputEl가 포커스 상태가 아닐 때(다른 요소를 선택했을 때)
     inputEl.addEventListener('blur', () => {
         // 텍스트 입력 불가능 
         inputEl.setAttribute('disabled', '');
+
+        // 텍스트 입력 후 블러 -> 입력한 텍스트가 로컬 저장소에 저장되어야 함
+        saveToLocalStorage();
     })
 
     // 입력된 텍스트를 생성된 todo 요소의 텍스트로 저장
@@ -128,6 +136,9 @@ function createTodoElement(item) {
 
         // item 요소 삭제
         itemEl.remove();
+        
+        // 요소를 삭제하면 로컬 저장소에 데이터 삭제 반영 
+        saveToLocalStorage();
     })
 
     // edit, remove 버튼 요소를 액션 엘리먼트 요소에 넣음
