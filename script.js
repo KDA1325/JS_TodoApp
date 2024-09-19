@@ -41,6 +41,9 @@ function createNewTodo() {
 
     // 포커스를 넣어주면 클릭하지 않아도 요소가 생기자마자 키보드 입력으로 타이핑 할 수 있게 됨
     inputEl.focus();
+
+    // 새로운 Todo를 생성하고 바로 로컬 저장소에 데이터 저장 
+    saveToLocalStorage();
 }
 
 // 요소 생성 함수
@@ -145,4 +148,43 @@ function createTodoElement(item) {
 function saveToLocalStorage() {
     // stringify를 통해 데이터를 string 형식으로 변환하여 저장
     const data = JSON.stringify(todos);
+
+    // window 객체 안에서 local storage의 setItem을 통해 로컬 저장소에 데이터 저장 가능
+    // window.localStorage.setItem('my_todos', data);
+    // window 는 생략 가능
+    localStorage.setItem('my_todos', data);
 }
+
+// 로컬 저장소로부터 데이터를 가져옴 
+function loadFromLocalStorage() {
+    // 로컬 저장소의 투두 데이터를 가져와 data 라는 함수에 저장
+    const data = localStorage.getItem('my_todos');
+
+    // 만약 data 값이 존재한다면
+    if(data)
+    {
+        // string을 object로 변환
+        todos = JSON.parse(data);
+    }
+}
+
+function displayTodos() {
+    loadFromLocalStorage();
+    
+    // 배열 안의 객체 수만큼 순회
+    for(let i = 0; i < todos.length; i++)
+    {
+            // 순회하면서 요소를 만듦
+            const item = todos[i];
+
+            // 새로 만든 요소에서 itemEl(div 요소) 반환
+            const {itemEl} = createTodoElement(item)
+
+            list.append(itemEl);
+    };
+
+}
+
+// 스크립트가 실행되면 바로 데이터 로드 함수 실행 
+//loadFromLocalStorage();
+displayTodos();
